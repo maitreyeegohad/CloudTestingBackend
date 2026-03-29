@@ -31,5 +31,25 @@ def get_data():
     except Exception as e:
         return str(e)
 
+@app.route("/aqi")
+def get_aqi():
+    try:
+        response = requests.get(URL)
+        data = response.json()
+
+        latest = data["feeds"][-1]
+
+        temp = float(latest["field1"])
+        hum = float(latest["field2"])
+
+        aqi = (temp * 2) + (hum * 0.5)
+
+        return jsonify({
+            "aqi": aqi
+        })
+
+    except Exception as e:
+        return str(e)
+
 if __name__ == "__main__":
     app.run()
